@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ShopDomain.Entities.Flower">
+    <Position X="2.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAACAAAAAAAAAAQAAAAAAAAAAAAIAAAAEAAAAAAg=</HashCode>
+      <FileName>Entities\Flower.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ShopDomain.Entities.Gift">
+    <Position X="5.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAgAAAAAAAAAAAAAAAAIAAAAAQAAAACA=</HashCode>
+      <FileName>Entities\Gift.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Flowers" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
