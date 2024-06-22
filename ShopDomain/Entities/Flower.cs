@@ -16,5 +16,6 @@ namespace ShopDomain.Entities
         public int GiftId { get; set; }
         public Gift Gift { get; set; }
 
+
     }
 }
