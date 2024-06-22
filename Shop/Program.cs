@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Shop.Components;
 using ShopPersistance;
+using ShopServices;
+using ShopServicesInterfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContextFactory<ShopContext>(options =>
@@ -9,6 +11,9 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")))
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddScoped<IGiftServices, GiftServices>();
+builder.Services.AddScoped<IFlowerServices, FlowerServices>();
 
 var app = builder.Build();
 

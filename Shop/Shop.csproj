@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ShopPersistance\ShopPersistance.csproj" />
+    <ProjectReference Include="..\ShopServicesInterfaces\ShopServicesInterfaces.csproj" />
+    <ProjectReference Include="..\ShopServices\ShopServices.csproj" />
   </ItemGroup>
 
 </Project>

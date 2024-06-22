@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop", "Shop\Shop.csproj", "{82571A9B-E7B8-47EC-A84F-0B25E39FEFDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shop", "Shop\Shop.csproj", "{82571A9B-E7B8-47EC-A84F-0B25E39FEFDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopDomain", "ShopDomain\ShopDomain.csproj", "{B618CEBB-7263-403F-856C-1A6AC77442E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopDomain", "ShopDomain\ShopDomain.csproj", "{B618CEBB-7263-403F-856C-1A6AC77442E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopPersistance", "ShopPersistance\ShopPersistance.csproj", "{0103B8F9-577A-4453-A340-C30390DC4713}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopPersistance", "ShopPersistance\ShopPersistance.csproj", "{0103B8F9-577A-4453-A340-C30390DC4713}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopServices", "ShopServices\ShopServices.csproj", "{DB479B62-B7DD-4C25-B863-D81D4209F4CC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopServicesInterfaces", "ShopServicesInterfaces\ShopServicesInterfaces.csproj", "{A08964B1-72F7-4C80-9580-F963CE2ABE37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{0103B8F9-577A-4453-A340-C30390DC4713}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0103B8F9-577A-4453-A340-C30390DC4713}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0103B8F9-577A-4453-A340-C30390DC4713}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB479B62-B7DD-4C25-B863-D81D4209F4CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB479B62-B7DD-4C25-B863-D81D4209F4CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB479B62-B7DD-4C25-B863-D81D4209F4CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB479B62-B7DD-4C25-B863-D81D4209F4CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A08964B1-72F7-4C80-9580-F963CE2ABE37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A08964B1-72F7-4C80-9580-F963CE2ABE37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A08964B1-72F7-4C80-9580-F963CE2ABE37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A08964B1-72F7-4C80-9580-F963CE2ABE37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
