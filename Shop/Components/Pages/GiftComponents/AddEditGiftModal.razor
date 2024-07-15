@@ -1,0 +1,74 @@
+@using ShopDomain.Entities
+@using ShopServicesInterfaces
+
+@if (isVisible)
+{
+    <div class="modal show" tabindex="-1" style="display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@((gift.GiftId == 0) ? "Add Gift" : "Edit Gift")</h5>
+                    <button type="button" class="btn-close" aria-label="Close" @onclick="Cancel"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="GiftName" class="form-label">GiftName</label>
+                        <input type="text" class="form-control" id="GiftName" @bind="gift.GiftName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="GiftType" class="form-label">GiftType</label>
+                        <input type="text" class="form-control" id="GiftType" @bind="gift.GiftType">
+                    </div>
+                    <div class="mb-3">
+                        <label for="GiftDescription" class="form-label">GiftDescription</label>
+                        <input type="text" class="form-control" id="GiftDescription" @bind="gift.GiftDescription">
+                    </div>
+                    <div class="mb-3">
+                        <label for="GiftPrice" class="form-label">GiftPrice</label>
+                        <input type="text" class="form-control" id="GiftPrice" @bind="gift.GiftPrice">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+                    <button type="button" class="btn btn-primary" @onclick="Save">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public EventCallback OnSave { get; set; }
+    [Inject] public IGiftServices GiftServices { get; set; }
+
+    private bool isVisible;
+
+    private Gift gift = new();
+
+    public void Show(Gift gift)
+    {
+        this.gift = gift;
+        isVisible = true;
+    }
+
+    private void Save()
+    {
+        if (gift.GiftId == 0)
+        {
+            GiftServices.Save(gift);
+        }
+        else
+        {
+            GiftServices.Update(gift);
+        }
+
+        isVisible = false;
+        OnSave.InvokeAsync();
+    }
+
+    private void Cancel()
+    {
+        isVisible = false;
+    }
+
+}

@@ -1,0 +1,70 @@
+﻿@using ShopDomain.Entities
+@using ShopServicesInterfaces
+
+@if (isVisible)
+{
+    <div class="modal show" tabindex="-1" style="display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@((flower.FlowerId == 0) ? "Add Flower" : "Edit Flower")</h5>
+                    <button type="button" class="btn-close" aria-label="Close" @onclick="Cancel"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="FlowerName" class="form-label">FlowerName</label>
+                        <input type="text" class="form-control" id="FlowerName" @bind="flower.FlowerName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="FlowerDescription" class="form-label">FlowerDescription</label>
+                        <input type="text" class="form-control" id="FlowerDescription" @bind="flower.FlowerDescription">
+                    </div>
+                    <div class="mb-3">
+                        <label for="FlowertPrice" class="form-label">FlowertPrice</label>
+                        <input type="text" class="form-control" id="FlowertPrice" @bind="flower.FlowertPrice">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+                    <button type="button" class="btn btn-primary" @onclick="Save">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter] public EventCallback OnSave { get; set; }
+    [Inject] public IFlowerServices FlowerServices { get; set; }
+
+    private bool isVisible;
+
+    private Flower flower = new();
+
+    public void Show(Flower flower)
+    {
+        this.flower = flower;
+        isVisible = true;
+    }
+
+    private void Save()
+    {
+        if (flower.FlowerId == 0)
+    {
+            FlowerServices.Save(flower);
+        }
+        else
+        {
+            FlowerServices.Update(flower);
+        }
+
+        isVisible = false;
+        OnSave.InvokeAsync();
+    }
+
+    private void Cancel()
+    {
+        isVisible = false;
+    }
+}

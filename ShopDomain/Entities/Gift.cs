@@ -9,7 +9,7 @@ namespace ShopDomain.Entities
     public class Gift
     {
         public int GiftId { get; set; }
-        public int GiftType { get; set; }
+        public string GiftType { get; set; }
         public string GiftName { get; set; }
         public string GiftDescription { get; set; }
         public string GiftPrice { get; set; }

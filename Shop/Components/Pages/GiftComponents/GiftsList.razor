@@ -2,8 +2,87 @@
 @rendermode InteractiveServer
 @using ShopDomain.Entities
 @using ShopServicesInterfaces
+
+
 <h3>Gifts</h3>
 
+<button class="btn btn-primary" @onclick="ShowAddModal">Add New Gift</button>
+
+<br />
+
+@if (gifts == null)
+{
+    <span>Loading...</span>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>GiftName</th>
+                <th>GiftType</th>
+                <th>GiftDescription</th>
+                <th>GiftPrice</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var gift in gifts)
+            {
+                <tr>
+                    <td>@gift.GiftName</td>
+                    <td>@gift.GiftType</td>
+                    <td>@gift.GiftDescription</td>
+                    <td>@gift.GiftPrice</td>
+                    <td>
+                        <button class="btn btn-secondary" @onclick="() => ShowEditModal(gift)">Edit</button>
+                        <button class="btn btn-danger" @onclick="() => DeleteGift(gift)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<AddEditGiftModal @ref="addEditGiftModal" OnSave="RefreshList" />
+
+
 @code {
+    [Inject] IGiftServices GiftServices { get; set; }
+
+    private List<Gift> gifts;
+
+    private AddEditGiftModal addEditGiftModal;
+
+    protected override void OnInitialized()
+    {
+         LoadGifts();
+    }
+
+    private void LoadGifts()
+    {
+        gifts = GiftServices.GetAll();
+    }
+
+    private void ShowAddModal()
+    {
+        addEditGiftModal.Show(new Gift());
+    }
+
+    private void ShowEditModal(Gift gift)
+    {
+        addEditGiftModal.Show(gift);
+    }
+
+    private void DeleteGift(Gift gift)
+    {
+        GiftServices.Delete(gift);
+        LoadGifts();
+    }
+
+    private void RefreshList()
+    {
+        LoadGifts();
+    }
 
 }

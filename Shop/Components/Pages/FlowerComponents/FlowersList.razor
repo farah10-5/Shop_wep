@@ -1,0 +1,84 @@
+﻿@page "/Flowers"
+@using ShopDomain.Entities
+@using ShopServicesInterfaces
+@rendermode InteractiveServer
+
+<h3>FlowersList</h3>
+
+<button class="btn btn-primary" @onclick="ShowAddModal">Add New Flower</button>
+
+<br />
+
+@if (flowers == null)
+{
+    <span>Loading...</span>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>FlowerName</th>
+                <th>FlowerDescription</th>
+                <th>FlowertPrice</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var flower in flowers)
+            {
+                <tr>
+                    <td>@flower.FlowerName</td>
+                    <td>@flower.FlowerDescription</td>
+                    <td>@flower.FlowertPrice</td>
+                    <td>
+                        <button class="btn btn-secondary" @onclick="() => ShowEditModal(flower)">Edit</button>
+                        <button class="btn btn-danger" @onclick="() => DeleteFlower(flower)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<AddEditFlowerModal @ref="addEditFlowerModal" OnSave="RefreshList" />
+
+
+@code {
+    [Inject] IFlowerServices FlowerServices { get; set; }
+
+    private List<Flower> flowers;
+
+    private AddEditFlowerModal addEditFlowerModal;
+
+    protected override void OnInitialized()
+    {
+        LoadFlowers();
+    }
+    
+    private void LoadFlowers()
+    {
+        flowers = FlowerServices.GetAll();
+    }
+
+    private void ShowAddModal()
+    {
+        addEditFlowerModal.Show(new Flower());
+    }
+  
+    private void ShowEditModal(Flower flower)
+    {
+        addEditFlowerModal.Show(flower);
+    }
+
+    private void DeleteFlower(Flower flower)
+    {
+        FlowerServices.Delete(flower);
+        LoadFlowers();
+    }
+
+    private void RefreshList()
+    {
+        LoadFlowers();
+    }
+}
