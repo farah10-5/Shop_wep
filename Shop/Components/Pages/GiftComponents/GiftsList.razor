@@ -54,14 +54,14 @@ else
 
     private AddEditGiftModal addEditGiftModal;
 
-    protected override void OnInitialized()
+    protected override async void OnInitializedAsync()
     {
-         LoadGifts();
+        await  LoadGifts();
     }
 
-    private void LoadGifts()
+    private async void LoadGifts()
     {
-        gifts = GiftServices.GetAll();
+        gifts = await GiftServices.GetAll();
     }
 
     private void ShowAddModal()
