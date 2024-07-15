@@ -19,7 +19,7 @@ namespace ShopServices
             contextFactory = dbContextFactory;
         }
 
-        public void Delete(Flower flower)
+        public async Task Delete(Flower flower)
         {
             using var db = contextFactory.CreateDbContext();
 
@@ -28,37 +28,37 @@ namespace ShopServices
             if (tmp != null)
             {
                 db.Flowers.Remove(tmp);
-                db.SaveChanges();
+               await db.SaveChangesAsync();
             }
         }
 
-        public Flower Get(int FlowerId)
+        public async Task< Flower> Get(int FlowerId)
         {
             using var db = contextFactory.CreateDbContext();
 
-            var flower = db.Flowers.FirstOrDefault(x => x.FlowerId == FlowerId);
+            var flower = await db.Flowers.FirstOrDefaultAsync(x => x.FlowerId == FlowerId);
             return flower;
         }
 
-        public List<Flower> GetAll()
+        public async Task<List<Flower>> GetAll()
         {
 
             using var db = contextFactory.CreateDbContext();
 
-            return db.Flowers.ToList();
+            return await db.Flowers.ToListAsync();
         }
 
-        public List<Flower> GetList(string FlowerName)
+        public async Task<List<Flower>> GetList(string FlowerName)
         {
 
             using var db = contextFactory.CreateDbContext();
 
             var flowers = db.Flowers.Where(x => x.FlowerName.Contains(FlowerName));
-            return [.. flowers];
+            return [..await flowers.ToListAsync()];
 
         }
 
-        public void Save(Flower flower)
+        public async Task Save(Flower flower)
         {
 
             using var db = contextFactory.CreateDbContext();
@@ -68,11 +68,11 @@ namespace ShopServices
             if (tmp == null)
             {
                 db.Flowers.Add(flower);
-                db.SaveChanges();
+               await db.SaveChangesAsync();
             }
         }
 
-        public void Update(Flower flower)
+        public async Task Update(Flower flower)
         {
             
             using var db = (contextFactory.CreateDbContext());
@@ -86,7 +86,7 @@ namespace ShopServices
                 tmp.FlowerDescription = flower.FlowerDescription;
                
 
-                db.SaveChanges();
+              await  db.SaveChangesAsync();
             }
         }
       }

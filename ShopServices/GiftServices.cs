@@ -20,7 +20,7 @@ namespace ShopServices
             contextFactory = dbContextFactory;
         }
 
-        public void Delete(Gift gift)
+        public async Task Delete(Gift gift)
         {
             using var db = contextFactory.CreateDbContext();
 
@@ -29,24 +29,24 @@ namespace ShopServices
             if (tmp != null)
             {
                 db.Gifts.Remove(tmp);
-                db.SaveChanges();
+              await  db.SaveChangesAsync();
             }
         }
 
-        public Gift Get(int GiftId)
+        public async Task<Gift> Get(int GiftId)
         {
             using var db = contextFactory.CreateDbContext();
 
-            var gift = db.Gifts.FirstOrDefault(x => x.GiftId == GiftId);
+            var gift = await db.Gifts.FirstOrDefaultAsync(x => x.GiftId == GiftId);
             return gift;
         }
 
-        public Gift Get(string GiftName)
+        public async Task<Gift> Get(string GiftName)
         {
             
             using var db = contextFactory.CreateDbContext();
 
-            var gift = db.Gifts.FirstOrDefault(x => x.GiftName.ToUpper() == GiftName.ToUpper());
+            var gift = await db.Gifts.FirstOrDefaultAsync(x => x.GiftName.ToUpper() == GiftName.ToUpper());
             return gift;
         }
 
@@ -58,15 +58,15 @@ namespace ShopServices
             return await db.Gifts.ToListAsync();
         }
 
-        public List<Gift> GetList(string GiftName)
+        public async Task<List<Gift>> GetList(string GiftName)
         {
             using var db = contextFactory.CreateDbContext();
 
-            var gifts = db.Gifts.Where(x => x.GiftName.Contains(GiftName));
+            var gifts = await db.Gifts.Where(x => x.GiftName.Contains(GiftName)).ToListAsync();
             return [.. gifts];
         }
 
-        public void Save(Gift gift)
+        public async Task Save(Gift gift)
         {
             
             using var db = contextFactory.CreateDbContext();
@@ -76,11 +76,11 @@ namespace ShopServices
             if (tmp == null)
             {
                 db.Gifts.Add(gift);
-                db.SaveChanges();
+               await db.SaveChangesAsync();
             }
         }
 
-        public void Update(Gift gift)
+        public async Task Update(Gift gift)
         {
             
             using var db = (contextFactory.CreateDbContext());
@@ -94,7 +94,7 @@ namespace ShopServices
                 tmp.GiftType = gift.GiftType;
                 tmp.GiftDescription = gift.GiftDescription;
 
-                db.SaveChanges();
+              await  db.SaveChangesAsync();
             }
         }
     }

@@ -9,12 +9,12 @@ namespace ShopServicesInterfaces
 {
     public interface IGiftServices
     {
-        void Delete(Gift gift);
-        Gift Get(int GiftI);
-        Gift Get(string GiftName);
-        List<Gift> GetList(string GiftName);
-        void Save(Gift gift);
-        void Update(Gift gift);
+        Task Delete(Gift gift);
+        Task<Gift> Get(int GiftI);
+        Task<Gift> Get(string GiftName);
+        Task<List<Gift>> GetList(string GiftName);
+        Task Save(Gift gift);
+        Task Update(Gift gift);
         Task<List<Gift>> GetAll();
       
     }

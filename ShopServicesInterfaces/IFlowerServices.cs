@@ -10,12 +10,12 @@ namespace ShopServicesInterfaces
     public interface IFlowerServices
     {
         
-         public void Delete(Flower flower);
-            public Flower Get(int FlowerId);
-            public List<Flower> GetList(string FlowerName);
-            public List<Flower> GetAll();
-            public void Save(Flower flower);
-            public void Update(Flower flower);
+          Task Delete(Flower flower);
+             Task <Flower> Get(int FlowerId);
+             Task< List<Flower>> GetList(string FlowerName);
+             Task<List<Flower>> GetAll();
+             Task Save(Flower flower);
+             Task Update(Flower flower);
         
     }
     }
