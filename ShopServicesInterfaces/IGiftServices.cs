@@ -15,7 +15,7 @@ namespace ShopServicesInterfaces
         List<Gift> GetList(string GiftName);
         void Save(Gift gift);
         void Update(Gift gift);
-        List<Gift> GetAll();
+        Task<List<Gift>> GetAll();
       
     }
 }

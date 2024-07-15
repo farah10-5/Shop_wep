@@ -50,12 +50,12 @@ namespace ShopServices
             return gift;
         }
 
-        public List<Gift> GetAll()
+        public async Task<List<Gift>> GetAll()
         {
             
             using var db = contextFactory.CreateDbContext();
 
-            return db.Gifts.ToList();
+            return await db.Gifts.ToListAsync();
         }
 
         public List<Gift> GetList(string GiftName)
