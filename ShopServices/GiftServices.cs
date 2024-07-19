@@ -97,6 +97,42 @@ namespace ShopServices
               await  db.SaveChangesAsync();
             }
         }
+
+        public async Task AddFlowerToGift(Gift gift, Flower flower)
+        {
+            using var db = contextFactory.CreateDbContext();
+            var tmpGift = db.Gifts.Include(x => x.Flowers).FirstOrDefault(x => x.GiftId == gift.GiftId);
+            if (tmpGift != null)
+            {
+                var tmpFlower = db.Flowers.FirstOrDefault(x => x.FlowerId == flower.FlowerId);
+                if (tmpFlower != null)
+                {
+                    tmpGift.Flowers.Add(tmpFlower);
+                }
+                else
+                {
+                    db.Flowers.Add(flower);
+                    await db.SaveChangesAsync();
+                    tmpGift.Flowers.Add(flower);
+                }
+                await db.SaveChangesAsync();
+            }
+        }
+        public async Task RemoveFlowerFromGift(Gift gift, Flower flower)
+        {
+            using var db = contextFactory.CreateDbContext();
+            var tmpGift = db.Gifts.Include(x => x.Flowers).FirstOrDefault(x => x.GiftId == gift.GiftId);
+            if (tmpGift != null)
+            {
+                var giftFlower = tmpGift.Flowers.FirstOrDefault(x => x.FlowerId == flower.FlowerId);
+                if (giftFlower != null)
+                {
+                    tmpGift.Flowers.Remove(giftFlower);
+                    await db.SaveChangesAsync();
+                }
+            }
+        }
+
     }
 
 

@@ -16,6 +16,8 @@ namespace ShopServicesInterfaces
         Task Save(Gift gift);
         Task Update(Gift gift);
         Task<List<Gift>> GetAll();
-      
+        Task AddFlowerToGift(Gift gift, Flower flower);
+        Task RemoveFlowerFromGift(Gift gift, Flower flower);
+
     }
 }

@@ -1,0 +1,95 @@
+﻿@page "/Flowers"
+@using ShopDomain.Entities
+@using ShopServicesInterfaces
+@rendermode InteractiveServer
+@inject IDialogService DialogService
+@inject IFlowerServices FlowerServices
+<h3>FlowersList</h3>
+
+<FluentButton Appearance="Appearance.Accent" @onclick="ShowAddModal">Add New Flower</FluentButton>
+<br />
+
+@if (flowers == null)
+{
+    <span>Loading...</span>
+}
+else
+{
+    <FluentDataGrid Items="@flowers">
+
+        GenerateHeader="GenerateHeaderOption.Sticky"
+        ResizableColumns=true Pagination="@pagination"
+        Style="width: 100%; height: 500px;overflow:auto;">
+       
+        <PropertyColumn Property="@(p=>p.FlowerName)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.FlowerDescription)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.FlowertPrice)" Sortable="true" />
+        <TemplateColumn Title="Actions" Align="@Align.End">
+            <FluentButton aria-label="Edit item" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => OpenDialogAsync(context))" />
+            <FluentButton aria-label="Delete item" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => DeleteFlower(context))" />
+        </TemplateColumn>
+
+    </FluentDataGrid>
+
+    <FluentPaginator State="@pagination" />
+}
+
+
+@code {
+    private IQueryable<Flower>? flowers;
+
+    private AddEditFlowerDialog addEditFlowerDialog;
+
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadFlowers();
+    }
+
+    private async Task LoadFlowers()
+    {
+
+        flowers = (await FlowerServices.GetAll()).AsQueryable();
+        StateHasChanged();
+    }
+
+    private async Task OpenDialogAsync(Flower flower)
+    {
+        DialogParameters parameters = new DialogParameters()
+            {
+                Title = ((flower.FlowerId == 0) ? "Add Flower" : "Edit Flower"),
+                PrimaryAction = "Yes",
+                PrimaryActionEnabled = false,
+                SecondaryAction = "No",
+                Width = "2000px",
+                TrapFocus = true,
+                Modal = true,
+                PreventScroll = true
+            };
+        var dialog = await DialogService.ShowDialogAsync<AddEditFlowerDialog>(flower, parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled && result.Data != null)
+        {
+            flower = (Flower)result.Data;
+            await LoadFlowers();
+        }
+
+
+    }
+    private async Task ShowAddModal()
+    {
+        await OpenDialogAsync(new Flower());
+    }
+
+    private async void DeleteFlower(Flower flower)
+    {
+        await FlowerServices.Delete(flower);
+        await LoadFlowers();
+    }
+
+    private async void RefreshList()
+    {
+        await LoadFlowers();
+    }
+}

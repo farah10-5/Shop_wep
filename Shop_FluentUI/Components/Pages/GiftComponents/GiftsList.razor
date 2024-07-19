@@ -1,0 +1,94 @@
+﻿@page "/Gifts"
+@rendermode InteractiveServer
+@using ShopDomain.Entities
+@using ShopServicesInterfaces
+@inject IDialogService DialogService
+
+<h3>Gifts</h3>
+
+<FluentButton Appearance="Appearance.Accent" @onclick="ShowAddModal">Add New Gift</FluentButton>
+
+<br />
+
+@if (gifts == null)
+{
+    <span>Loading...</span>
+}
+else
+{
+    <FluentDataGrid Items="@gifts">
+
+        <PropertyColumn Property="@(p=>p.GiftName)"Sortable="true"/>
+        <PropertyColumn Property="@(p=>p.GiftType)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.GiftDescription)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.GiftPrice)" Sortable="true" />
+        <TemplateColumn Title="Actions" Align="@Align.End">
+            <FluentButton aria-label="Edit item" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => OpenDialogAsync(context))" />
+            <FluentButton aria-label="Delete item" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => DeleteGift(context))" />
+        </TemplateColumn>
+        
+    </FluentDataGrid>
+   
+}
+
+<FluentPaginator State="@pagination"/>
+@code {
+    [Inject] IGiftServices GiftServices { get; set; }
+
+    private IQueryable <Gift> gifts;
+
+    private AddEditGiftDialog addEditGiftDialog;
+
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await  LoadGifts();
+    }
+
+    private async Task LoadGifts()
+    {
+        gifts = (await GiftServices.GetAll()).AsQueryable();
+    }
+
+    private async Task OpenDialogAsync(Gift gift)
+    {
+        DialogParameters parameters = new DialogParameters()
+            {
+                Title = ((gift.GiftId == 0) ? "Add Gift" : "Edit Gift"),
+                PrimaryAction = "Yes",
+                PrimaryActionEnabled = false,
+                SecondaryAction = "No",
+                Width = "800px",
+                TrapFocus = true,
+                Modal = true,
+                PreventScroll = true
+            };
+        var dialog = await DialogService.ShowDialogAsync<AddEditGiftDialog>(gift, parameters);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled && result.Data != null)
+        {
+            await LoadGifts();
+        }
+
+    }
+
+    private async Task ShowAddModal()
+    {
+      await  OpenDialogAsync(new Gift());
+   }
+   
+
+    private async void DeleteGift(Gift gift)
+    {
+       await GiftServices.Delete(gift);
+       await LoadGifts();
+    }
+
+    private async void RefreshList()
+    {
+       await LoadGifts();
+    }
+
+}

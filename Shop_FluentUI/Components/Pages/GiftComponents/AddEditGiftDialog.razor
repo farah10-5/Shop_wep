@@ -1,0 +1,125 @@
+﻿@using ShopDomain.Entities
+@using FlowerComponents
+@using ShopServices
+@using ShopServicesInterfaces
+@implements IDialogContentComponent
+@inject IGiftServices GiftServices
+@inject IFlowerServices FlowerServices
+@inject NavigationManager NavigationManager
+
+<FluentDialogHeader ShowDismiss="true">
+	<h5 class="modal-title">
+		@((Content.GiftId==0) ? "Add Gift" : "Edit Gift")
+	</h5>
+</FluentDialogHeader>
+<FluentDialogBody>
+    <FluentGrid>
+        <FluentGridItem xs="12" md="8">
+            <FluentGrid>
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentTextField @bind-Value="@Content.GiftName" style="width:100%">GiftName</FluentTextField>
+                </FluentGridItem>
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentTextField @bind-Value="@Content.GiftType" style="width:100%">GiftType</FluentTextField>
+                </FluentGridItem>
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentTextField @bind-Value="@Content.GiftDescription" style="width:100%">GiftDescription</FluentTextField>
+                </FluentGridItem>
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentTextField @bind-Value="@Content.GiftPrice" style="width:100%">GiftPrice</FluentTextField>
+                </FluentGridItem>
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentListbox Items="AvailableFlowers"
+                                   OptionText="@(i=>i.FlowerName)"
+                                   OptionValue="@(i=>i.FlowerId.ToString())"
+                                   @bind-SelectedOption="@SelectedFlower"
+                                   style="width:100%"
+                                   Label="Available Flowers">
+                        <OptionTemplate>
+                            <FluentButton IconEnd="@(new Icons.Regular.Size16.AddCircle())"
+                                          @onclick="@(()=>AddToGift(@context))" />
+                            @context.FlowerName
+                        </OptionTemplate>
+                    </FluentListbox>
+                </FluentGridItem>
+
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentListbox Items="Content.Flowers"
+                                   OptionText="@(i=>i.FlowerName)"
+                                   OptionValue="@(i=>i.FlowerId.ToString())"
+                                   @bind-SelectedOption="@SelectedFlower"
+                                   style="width:100%"
+                                   Label="Gift's Flowers">
+                        <OptionTemplate>
+                            <FluentButton IconEnd="@(new Icons.Regular.Size16.Delete())"
+                                          @onclick="@(()=>RemoveFromGift(@context))" />
+                            @context.FlowerName
+                        </OptionTemplate>
+
+                    </FluentListbox>
+                </FluentGridItem>
+            </FluentGrid>
+        </FluentGridItem>
+
+
+    </FluentGrid>
+
+</FluentDialogBody>
+
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Stealth" @onclick="OpenFlowers">Flowers</FluentButton>
+    <FluentButton Appearance="Appearance.Neutral" @onclick="Cancel">Cancel</FluentButton>
+    <FluentButton Appearance="Appearance.Accent" @onclick="SaveAsync">Save</FluentButton>
+</FluentDialogFooter>
+@code {
+    [Parameter] public EventCallback OnSave { get; set; }
+    [Parameter] public Gift Content { get; set; } = new();
+    [CascadingParameter] public FluentDialog Dialog { get; set; }
+
+    public Flower SelectedFlower { get; set; } = new();
+    public List<Flower> AvailableFlowers { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        AvailableFlowers = await FlowerServices.GetAll();
+    }
+    private async Task SaveAsync()
+    {
+        if (Content.GiftId == 0)
+        {
+            await GiftServices.Save(Content);
+        }
+        else
+        {
+            await GiftServices.Update(Content);
+        }
+        await OnSave.InvokeAsync();
+        await Dialog.CloseAsync(Content);
+    }
+
+    private async void Cancel()
+    {
+        await Dialog.CloseAsync();
+    }
+
+    private async void AddToGift(Flower flower)
+    {
+        await GiftServices.AddFlowerToGift(Content, flower);
+        Content.Flowers.Add(flower);
+        StateHasChanged();
+
+    }
+
+    private async void RemoveFromGift(Flower flower)
+    {
+        await GiftServices.RemoveFlowerFromGift(Content, flower);
+        Content.Flowers.Remove(flower);
+        StateHasChanged();
+
+    }
+    private void OpenFlowers()
+    {
+        NavigationManager.NavigateTo("/flowers");
+    }
+
+}

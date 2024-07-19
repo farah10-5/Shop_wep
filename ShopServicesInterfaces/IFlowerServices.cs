@@ -10,7 +10,7 @@ namespace ShopServicesInterfaces
     public interface IFlowerServices
     {
         
-          Task Delete(Flower flower);
+             Task Delete(Flower flower);
              Task <Flower> Get(int FlowerId);
              Task< List<Flower>> GetList(string FlowerName);
              Task<List<Flower>> GetAll();

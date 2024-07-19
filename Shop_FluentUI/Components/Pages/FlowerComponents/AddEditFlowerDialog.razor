@@ -1,0 +1,56 @@
+﻿@using ShopDomain.Entities
+@using ShopServicesInterfaces
+@implements IDialogContentComponent
+@inject IFlowerServices FlowerServices
+
+<FluentDialogHeader ShowDismiss="true">
+    <h5 class="modal-title">@((Content.FlowerId == 0) ? "Add Flower" : "Edit Flower")</h5>
+</FluentDialogHeader>
+<FluentDialogBody>
+    <FluentGrid>
+        <FluentGridItem xs="12">
+            <FluentGrid>
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentTextField @bind-Value="@Content.FlowerName" style="width:100%">FlowerName</FluentTextField>
+                </FluentGridItem>
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentTextField @bind-Value="@Content.FlowerDescription" style="width:100%">FlowerDescription</FluentTextField>
+                </FluentGridItem>
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentTextField @bind-Value="@Content.FlowertPrice" style="width:100%">FlowertPrice</FluentTextField>
+                </FluentGridItem>
+            </FluentGrid>
+        </FluentGridItem>
+    </FluentGrid>
+</FluentDialogBody>
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Neutral" @onclick="Cancel">Cancel</FluentButton>
+    <FluentButton Appearance="Appearance.Accent" @onclick="SaveAsync">Save</FluentButton>
+</FluentDialogFooter>
+
+@code {
+    [Parameter] public Flower Content { get; set; } = new();
+    [CascadingParameter] public FluentDialog Dialog { get; set; }
+
+
+
+    private async Task SaveAsync()
+    {
+        if (Content.FlowerId == 0)
+        {
+            await FlowerServices.Save(Content);
+        }
+        else
+        {
+            await FlowerServices.Update(Content);
+        }
+
+        await Dialog.CloseAsync(Content);
+    }
+
+    private async void Cancel()
+    {
+        await Dialog.CloseAsync();
+    }
+
+}

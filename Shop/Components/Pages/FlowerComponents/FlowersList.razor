@@ -51,14 +51,14 @@ else
 
     private AddEditFlowerModal addEditFlowerModal;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        LoadFlowers();
+      await LoadFlowers();
     }
     
-    private void LoadFlowers()
+    private async Task LoadFlowers()
     {
-        flowers = FlowerServices.GetAll();
+        flowers = await FlowerServices.GetAll();
     }
 
     private void ShowAddModal()
