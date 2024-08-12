@@ -8,6 +8,10 @@ namespace ShopDomain.Entities
 {
     public class Gift
     {
+        public Gift()
+        {
+                Flowers = new List<Flower>();
+        }
         public int GiftId { get; set; }
         public string GiftType { get; set; }
         public string GiftName { get; set; }

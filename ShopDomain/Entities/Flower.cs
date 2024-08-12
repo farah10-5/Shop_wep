@@ -12,9 +12,7 @@ namespace ShopDomain.Entities
         public string FlowerName { get; set; }
         public string FlowerDescription { get; set; }
         public string FlowertPrice { get; set; }
-
-        public int GiftId { get; set; }
-        public Gift Gift { get; set; }
+        public List<Gift> Gifts { get; set; }
 
 
     }

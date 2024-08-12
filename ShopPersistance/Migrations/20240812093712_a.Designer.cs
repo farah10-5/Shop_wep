@@ -11,8 +11,8 @@ using ShopPersistance;
 namespace ShopPersistance.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    [Migration("20240802155445_shop")]
-    partial class shop
+    [Migration("20240812093712_a")]
+    partial class a
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,21 @@ namespace ShopPersistance.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("FlowerGift", b =>
+                {
+                    b.Property<int>("FlowersFlowerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GiftsGiftId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FlowersFlowerId", "GiftsGiftId");
+
+                    b.HasIndex("GiftsGiftId");
+
+                    b.ToTable("FlowerGift");
+                });
 
             modelBuilder.Entity("ShopDomain.Entities.Flower", b =>
                 {
@@ -44,12 +59,7 @@ namespace ShopPersistance.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("GiftId")
-                        .HasColumnType("int");
-
                     b.HasKey("FlowerId");
-
-                    b.HasIndex("GiftId");
 
                     b.ToTable("Flowers");
                 });
@@ -83,20 +93,19 @@ namespace ShopPersistance.Migrations
                     b.ToTable("Gifts");
                 });
 
-            modelBuilder.Entity("ShopDomain.Entities.Flower", b =>
+            modelBuilder.Entity("FlowerGift", b =>
                 {
-                    b.HasOne("ShopDomain.Entities.Gift", "Gift")
-                        .WithMany("Flowers")
-                        .HasForeignKey("GiftId")
+                    b.HasOne("ShopDomain.Entities.Flower", null)
+                        .WithMany()
+                        .HasForeignKey("FlowersFlowerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Gift");
-                });
-
-            modelBuilder.Entity("ShopDomain.Entities.Gift", b =>
-                {
-                    b.Navigation("Flowers");
+                    b.HasOne("ShopDomain.Entities.Gift", null)
+                        .WithMany()
+                        .HasForeignKey("GiftsGiftId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
